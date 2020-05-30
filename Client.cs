@@ -36,6 +36,8 @@ public class Client : MonoBehaviour
     
     public void connect(string IpAddress, int port)
     {
+        DontDestroyOnLoad(this.gameObject);
+
         socketConnection = new TcpClient();
 
         IPAddress serverIp = IPAddress.Parse(IpAddress);

@@ -55,6 +55,8 @@ public class Listener : MonoBehaviour
     }
     public string configListenerAndStartListening(int port)
     {
+        DontDestroyOnLoad(this.gameObject);
+
         string socketIp = configListener(port);
         beginListening();
         return socketIp;
@@ -125,6 +127,8 @@ public class Listener : MonoBehaviour
     }
     public string configListener(int port)
     {
+        DontDestroyOnLoad(this.gameObject);
+
         IPHostEntry ihe = Dns.GetHostEntry(Dns.GetHostName());
         listener = new TcpListener(ihe.AddressList[0], port);
         listener.Start();
