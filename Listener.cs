@@ -31,15 +31,15 @@ public class Listener : MonoBehaviour
         get
         {
             int counter = 0;
-            for(int i = 0; i < connections.Count; i++)
+            for(int i = 0; i < _connections.Count; i++)
             {
-                if(connections[i].connected)
+                if(_connections[i].connected)
                 {
                     counter++;
                 }
                 else
                 {
-                    connections.RemoveAt(i);
+                    _connections.RemoveAt(i);
                     i--;
                     connectionsCounter--;
                 }
@@ -69,7 +69,7 @@ public class Listener : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError(e);
         }
     }
     private void clientConnected(IAsyncResult ar)
@@ -77,6 +77,7 @@ public class Listener : MonoBehaviour
         if(allowAcceptTcpClient)
         {
             ConnectionManager cm = new ConnectionManager(listener.EndAcceptTcpClient(ar), connectionId);
+            Debug.Log("client detected");
             if(isTcpClientExist(cm))
             {
                 replaceCurrentCmWithOldCm(cm);
@@ -97,7 +98,7 @@ public class Listener : MonoBehaviour
             }
             catch(Exception e)
             {
-                Debug.Log(e);
+                Debug.LogError(e);
             }
         }
     }
