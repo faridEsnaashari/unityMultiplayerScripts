@@ -50,6 +50,11 @@ public class ConnectionManager
     //    dataRecived = _dataRecived;
     //    getData();
     //}
+    public void close()
+    {
+        _socketStream.Close();
+        _socketConnection.Close();
+    }
     private void getData()
     {
         try
