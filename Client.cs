@@ -33,6 +33,9 @@ public class Client : MonoBehaviour
         }
     }
 
+
+    public delegate void DataRecivedEventHandler(string data, int length);
+    public event DataRecivedEventHandler _dataRecived;
     
     public void connect(string IpAddress, int port)
     {
@@ -49,6 +52,28 @@ public class Client : MonoBehaviour
         socketConnection.EndConnect(ar);
 
         _connection = new ConnectionManager(socketConnection, 0);
+        _connection.subscribeToDataRecivedEvent(invokeDataRecivedEvent);
+    }
+
+    public void getData(DataRecivedEventHandler dataRecived)
+    {
+        _dataRecived += dataRecived;
+    }
+    public void invokeDataRecivedEvent(string data, int length, int id)
+    {
+        if(_dataRecived != null)
+        {
+            _dataRecived(data, length);
+        }
+    }
+    public void sendData(string data)
+    {
+        _connection.sendDataToSocket(data);
+    }
+    void OnApplicationQuit()
+    {
+        Debug.Log("quit");
+        Debug.Log("Application ending after " + Time.time + " seconds");
     }
     public void closeConnection()
     {

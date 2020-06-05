@@ -20,6 +20,9 @@ public class Listener : MonoBehaviour
         get {return _connections;}
     }
 
+    public delegate void DataRecivedEventHandler(string data, int length, int id);
+    public event DataRecivedEventHandler _dataRecived;
+
     private const int MAXIMUM_CONNECTION = 10;
     private int connectionsCounter = 0;
     private int connectionId = 0;
@@ -78,6 +81,8 @@ public class Listener : MonoBehaviour
         {
             ConnectionManager cm = new ConnectionManager(listener.EndAcceptTcpClient(ar), connectionId);
             Debug.Log("client detected");
+            cm.subscribeToDataRecivedEvent(invokeDataRecivedEvent);
+
             if(isTcpClientExist(cm))
             {
                 replaceCurrentCmWithOldCm(cm);
@@ -140,6 +145,33 @@ public class Listener : MonoBehaviour
             socketIpUI.text = socketIp;
         }   
         return socketIp;
+    }
+
+    public void getData(DataRecivedEventHandler dataRecived)
+    {
+        _dataRecived += dataRecived;
+    }
+    public void invokeDataRecivedEvent(string data, int length, int id)
+    {
+        if(_dataRecived != null)
+        {
+            _dataRecived(data, length, id);
+        }
+    }
+    public void sendData(string data, int id)
+    {
+        _connections[id].sendDataToSocket(data);
+    }
+    public void sendData(string data)
+    {
+        for(int i = 0; i < _connections.Count; i++)
+        {
+            _connections[i].sendDataToSocket(data);
+        }
+    }
+    void OnApplicationQuit()
+    {
+        Debug.Log("Application ending after " + Time.time + " seconds");
     }
     public void closeConnection()
     {
