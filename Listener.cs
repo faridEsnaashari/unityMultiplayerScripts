@@ -141,4 +141,15 @@ public class Listener : MonoBehaviour
         }   
         return socketIp;
     }
+    public void closeConnection()
+    {
+        for(int i = 0; i < _connections.Count; i++)
+        {
+            _connections[i].close();
+        }
+    }
+    public void closeConnection(int id)
+    {
+        _connections[id].close();
+    }
 }

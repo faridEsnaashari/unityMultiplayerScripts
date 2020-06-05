@@ -50,4 +50,8 @@ public class Client : MonoBehaviour
 
         _connection = new ConnectionManager(socketConnection, 0);
     }
+    public void closeConnection()
+    {
+        _connection.close();
+    }
 }
